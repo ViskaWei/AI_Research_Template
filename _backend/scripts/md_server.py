@@ -49,6 +49,8 @@ ol li { padding: 2px 0; }
 /* 目录导航的列表样式 */
 ul.dir-listing { list-style-type: none; padding-left: 0; }
 ul.dir-listing li { padding: 4px 0; }
+/* 图片样式 - 限制为原始大小的 1/3 */
+img { max-width: 600px; width: 33.33%; height: auto; display: block; margin: 10px 0; }
 
 /* Syntax highlighting - Colorful Light theme */
 .codehilite { background: #f6f8fa; color: #24292e; }
