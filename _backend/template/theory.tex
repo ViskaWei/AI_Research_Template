@@ -1,0 +1,232 @@
+%% ============================================================================
+%% AI Research Template - Theoretical Analysis Template
+%% Author: Viska Wei
+%% ============================================================================
+
+\documentclass[11pt]{article}
+
+%% Packages
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{tcolorbox}
+
+%% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{assumption}{Assumption}
+
+%% Commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}[1]{\mathbb{E}\left[{#1}\right]}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\argmin}{\operatorname{argmin}}
+\newcommand{\argmax}{\operatorname{argmax}}
+
+\title{\textbf{Theoretical Analysis for {{PROJECT_NAME}}}\\[0.5em]
+\large {{SUBTITLE}}}
+\author{Viska Wei}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document presents a comprehensive theoretical analysis for {{PROJECT_DESCRIPTION}}. 
+We establish: 
+(i) identifiability conditions, 
+(ii) consistency and convergence rates for the estimator, 
+(iii) minimax lower bounds proving optimality, and 
+(iv) neural network approximation and generalization bounds (if applicable).
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%% ============================================================================
+\section{Problem Formulation}
+\label{sec:formulation}
+%% ============================================================================
+
+\subsection{Notation and Setup}
+
+Let $\mathcal{X}$ be the data space and $\mathcal{H}$ be the hypothesis space. 
+
+\begin{itemize}
+    \item[(A1)] \textbf{Data Model}: {{DATA_MODEL_ASSUMPTION}}
+    \item[(A2)] \textbf{Regularity}: {{REGULARITY_ASSUMPTION}}
+    \item[(A3)] \textbf{Identifiability}: {{IDENTIFIABILITY_ASSUMPTION}}
+\end{itemize}
+
+\subsection{Loss Function}
+
+Define the population loss:
+\begin{equation}\label{eq:pop_loss}
+\mathcal{L}(\theta) := \E{\ell(\theta; X)},
+\end{equation}
+where $\ell$ is the per-sample loss function.
+
+The empirical loss with $n$ samples:
+\begin{equation}\label{eq:emp_loss}
+\hat{\mathcal{L}}_n(\theta) := \frac{1}{n}\sum_{i=1}^{n} \ell(\theta; X_i).
+\end{equation}
+
+%% ============================================================================
+\section{Identifiability Analysis}
+\label{sec:identifiability}
+%% ============================================================================
+
+\begin{definition}[Identifiability]\label{def:identifiability}
+A parameter $\theta^*$ is \emph{identifiable} if for any $\theta \in \Theta$:
+$$
+\mathcal{L}(\theta) = \mathcal{L}(\theta^*) \implies \theta = \theta^* \text{ (up to equivalence)}.
+$$
+\end{definition}
+
+\begin{theorem}[Identifiability Condition]\label{thm:identifiability}
+Under assumptions (A1)-(A3), if the following coercivity condition holds:
+\begin{equation}\label{eq:coercivity}
+\mathcal{L}(\theta) - \mathcal{L}(\theta^*) \geq c_H \|\theta - \theta^*\|^2,
+\end{equation}
+for some $c_H > 0$, then $\theta^*$ is identifiable.
+\end{theorem}
+
+\begin{proof}
+% Proof here
+\end{proof}
+
+%% ============================================================================
+\section{Consistency and Convergence Rates}
+\label{sec:consistency}
+%% ============================================================================
+
+\begin{theorem}[Consistency]\label{thm:consistency}
+Let $\hat{\theta}_n = \argmin_{\theta \in \Theta} \hat{\mathcal{L}}_n(\theta)$. Under assumptions (A1)-(A3), as $n \to \infty$:
+$$
+\hat{\theta}_n \xrightarrow{P} \theta^*.
+$$
+\end{theorem}
+
+\begin{theorem}[Convergence Rate]\label{thm:rate}
+Under the additional assumption that $\Theta$ has finite complexity (e.g., finite VC dimension), we have:
+\begin{equation}
+\E{\|\hat{\theta}_n - \theta^*\|^2} \leq \frac{C}{c_H^2} \cdot \frac{d}{n},
+\end{equation}
+where $d$ is the effective dimension and $C$ is a universal constant.
+\end{theorem}
+
+%% ============================================================================
+\section{Minimax Lower Bounds}
+\label{sec:lower_bounds}
+%% ============================================================================
+
+\begin{theorem}[Information-Theoretic Lower Bound]\label{thm:lower_bound}
+For the estimation problem, the minimax risk satisfies:
+\begin{equation}
+\inf_{\hat{\theta}} \sup_{\theta^* \in \Theta} \E{\|\hat{\theta} - \theta^*\|^2} \geq \frac{c \cdot d}{n},
+\end{equation}
+where $c > 0$ is a constant depending only on the problem structure.
+\end{theorem}
+
+\begin{proof}
+The proof uses Fano's inequality or Le Cam's method. 
+% Details here
+\end{proof}
+
+\begin{corollary}[Optimality]
+The rate $n^{-1}$ achieved by our estimator is minimax optimal.
+\end{corollary}
+
+%% ============================================================================
+\section{Neural Network Bounds (if applicable)}
+\label{sec:nn_bounds}
+%% ============================================================================
+
+For neural network estimators, we decompose the error.
+
+\begin{theorem}[Approximation Error]\label{thm:nn_approx}
+Let $\mathcal{F}_{NN}(W, D)$ denote ReLU networks with width $W$ and depth $D$. If $\theta^* \in C^s$, then:
+\begin{equation}
+\inf_{f \in \mathcal{F}_{NN}} \|f - \theta^*\|_\infty \leq C W^{-2s/d} (\log W)^{2s/d}.
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[Generalization Bound]\label{thm:generalization}
+The total error satisfies:
+\begin{equation}
+\E{\mathcal{L}(\hat{\theta}_{NN})} - \mathcal{L}(\theta^*) \leq \underbrace{O(W^{-2s/d})}_{\text{approximation}} + \underbrace{O\left(\frac{WD \log(WD)}{n}\right)}_{\text{estimation}}.
+\end{equation}
+\end{theorem}
+
+%% ============================================================================
+\section{Fisher Information and CRLB}
+\label{sec:fisher}
+%% ============================================================================
+
+\begin{definition}[Fisher Information]\label{def:fisher}
+The Fisher information matrix at $\theta$ is:
+\begin{equation}
+I(\theta) := \E{\nabla_\theta \log p(X; \theta) \nabla_\theta \log p(X; \theta)^\top}.
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Cramér-Rao Lower Bound]\label{thm:crlb}
+For any unbiased estimator $\hat{\theta}$:
+\begin{equation}
+\Var(\hat{\theta}) \geq I(\theta)^{-1}.
+\end{equation}
+\end{theorem}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Practical Implications]
+The CRLB tells us:
+\begin{itemize}
+    \item \textbf{Theoretical ceiling}: No estimator can beat $I(\theta)^{-1}$ variance
+    \item \textbf{Data requirement}: To achieve error $\epsilon$, need $n \geq \text{tr}(I^{-1}) / \epsilon^2$
+    \item \textbf{Efficiency}: If our estimator achieves CRLB, it is statistically optimal
+\end{itemize}
+\end{tcolorbox}
+
+%% ============================================================================
+\section{Summary}
+\label{sec:summary}
+%% ============================================================================
+
+\begin{table}[h]
+\centering
+\caption{Theoretical Results Summary}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Result} & \textbf{Rate} & \textbf{Optimal?} \\
+\midrule
+Upper Bound & $O(d/n)$ & -- \\
+Lower Bound & $\Omega(d/n)$ & -- \\
+\textbf{Gap} & \textbf{None} & \textbf{Yes} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\bibliographystyle{plain}
+\bibliography{theory}
+
+%% ============================================================================
+\appendix
+\section{Proof Details}
+\label{app:proofs}
+%% ============================================================================
+
+% Detailed proofs here
+
+\section{Technical Lemmas}
+\label{app:lemmas}
+
+% Supporting lemmas
+
+\end{document}

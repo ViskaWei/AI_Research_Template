@@ -1,13 +1,18 @@
 # 📖 实验管理系统 - 命令速查手册
 
-> **最后更新**: 2025-01-08  
-> **适用仓库**: GiftLive
+> **最后更新**: 2026-01-29  
+> **适用仓库**: AI Research Template  
+> **作者**: Viska Wei
 
 ---
 
 ## 🗂️ 目录
 
 - [快捷命令总览](#-快捷命令总览)
+- [🤖 自主科研 Agent](#-自主科研-agent)
+- [📚 理论探索](#-理论探索)
+- [📝 报告生成](#-报告生成)
+- [🔍 文献搜索](#-文献搜索)
 - [进度查看](#-进度查看)
 - [实验管理](#-实验管理)
 - [文档更新](#-文档更新)
@@ -30,8 +35,174 @@
 | `card` | 创建知识卡片 | `experiments/[topic]/card/` |
 | `design` | 提取设计原则 | `design/principles.md` |
 | `next` | 管理待办 | `status/next_steps.md` |
-| `report` | 生成报告 | `reports/drafts/` |
+| `report` | 生成报告 | `reports/[topic]/phaseX/` |
 | `session` | GPT 会话归档 | `experiments/[topic]/sessions/` |
+
+### 🆕 新增命令 (v2.0)
+
+| 命令 | 作用 | 输出位置 |
+|------|------|----------|
+| `rq [问题]` | 🤖 启动自主科研 Agent | 完整项目结构 |
+| `loop` | 🔄 继续自主循环 | - |
+| `theory [主题]` | 📚 启动理论探索 | `experiments/[topic]/theory/` |
+| `search [关键词]` | 🔍 搜索学术论文 | 终端输出 + BibTeX |
+| `latex [phase]` | 📄 生成 LaTeX 报告 | `reports/[topic]/phaseX/` |
+| `compile [phase]` | 📑 编译 PDF | `reports/*.pdf` |
+
+---
+
+## 🤖 自主科研 Agent
+
+### 启动完整科研流程
+```
+触发词: rq | 立项 | 研究这个问题
+```
+
+**作用**: 从 research question 开始，自动执行完整科研生命周期
+
+**示例**:
+```
+用户: rq 如何从无标签数据学习交互粒子系统的势函数？
+
+AI: 🤖 Agent 启动
+    [初始化项目]
+    ├─ 分析 Research Question
+    ├─ 构建假设树 (Q1 → Q1.1, Q1.2...)
+    ├─ 创建 experiments/ips_unlabeled/
+    ├─ 创建 Hub 和 Roadmap
+    └─ 进入 AGENT_LOOP
+    
+    [Iteration 1] MVP-0.0: Baseline
+    ├─ 执行实验...
+    ├─ 更新文档...
+    └─ Git commit
+    
+    [Iteration 2] MVP-1.0: 核心假设验证
+    ...
+```
+
+### 继续循环
+```
+触发词: loop | 继续 | continue
+```
+
+**作用**: 根据现有 Hub/Roadmap 继续自主执行
+
+---
+
+## 📚 理论探索
+
+### 启动理论分析
+```
+触发词: theory | 理论 | theoretical
+```
+
+**作用**: 自动搜索相关论文 + 生成理论分析文档
+
+**示例**:
+```
+用户: theory RKHS正则化逆问题
+
+AI: 📚 Theory Explorer 启动
+    
+    🔍 Step 1: 搜索相关论文
+    ├─ arXiv: 找到 15 篇
+    └─ Semantic Scholar: 找到 12 篇
+    
+    🤖 Step 2: 生成理论分析
+    ├─ Identifiability 条件
+    ├─ 收敛率推导
+    └─ Fisher/CRLB 计算
+    
+    📝 Step 3: 生成文档
+    ├─ theory/theoretical_analysis.tex
+    └─ theory/related_papers.bib
+```
+
+### 直接运行脚本
+```bash
+cd _backend/scripts
+python theory_explorer.py "研究问题" --topic 主题名
+```
+
+---
+
+## 📝 报告生成
+
+### 生成 LaTeX 报告
+```
+触发词: latex | report | 报告
+```
+
+**作用**: 基于实验结果生成高质量 LaTeX 报告
+
+**示例**:
+```
+用户: latex phase2
+
+AI: 📝 生成 Phase 2 报告
+    ├─ 读取实验数据...
+    ├─ 生成 reports/ips_unlabeled/phase2/phase2_report.tex
+    ├─ 生成 figures/...
+    └─ 生成 phase2_report.bib
+```
+
+### 编译 PDF
+```
+触发词: compile | pdf | 编译
+```
+
+**作用**: 编译 LaTeX 为 PDF
+
+**示例**:
+```
+用户: compile phase2
+
+AI: 📑 编译 PDF
+    ├─ pdflatex (pass 1)...
+    ├─ bibtex...
+    ├─ pdflatex (pass 2)...
+    └─ ✅ 保存到: reports/phase2_report.pdf
+```
+
+### 直接运行脚本
+```bash
+cd _backend/scripts
+./compile_report.sh ips_unlabeled 2
+```
+
+---
+
+## 🔍 文献搜索
+
+### 搜索论文
+```
+触发词: search | 搜索 | papers
+```
+
+**作用**: 在 arXiv/Semantic Scholar/Perplexity 搜索论文
+
+**示例**:
+```
+用户: search neural network approximation theory
+
+AI: 🔍 搜索论文...
+    
+    📚 arXiv (10 篇):
+    1. [stat.ML] Deep Neural Network Approximation...
+    2. [cs.LG] Universal Approximation with...
+    ...
+    
+    🤖 AI 摘要:
+    Recent advances in neural network approximation theory
+    focus on...
+```
+
+### 直接运行脚本
+```bash
+cd _backend/scripts
+python search_papers.py "查询" --max-results 10 --output refs.bib
+```
 
 ---
 

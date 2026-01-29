@@ -1,0 +1,144 @@
+# =============================================================================
+# 自主科研模式配置 (Autonomous Research Mode)
+# =============================================================================
+# 此配置控制 research-project-manager 的自主运行行为
+# 训练后台执行，只在决策点调用 Claude，最大化省 token
+# =============================================================================
+
+# 基本设置
+autonomous_mode: true
+project_name: ""  # 项目名，留空则自动检测
+
+# -----------------------------------------------------------------------------
+# 迭代控制
+# -----------------------------------------------------------------------------
+iteration:
+  max_iterations: 20          # 最大迭代次数
+  max_consecutive_failures: 3 # 连续失败 N 次后暂停
+
+  # 实验超时（秒）
+  experiment_timeout: 7200    # 单次实验最长 2 小时
+  total_timeout: 259200       # 总运行时间最长 72 小时
+
+# -----------------------------------------------------------------------------
+# 检查点与报告
+# -----------------------------------------------------------------------------
+checkpoint:
+  interval_hours: 6           # 每 N 小时生成进度报告
+  report_to_file: true        # 报告保存到文件
+  report_path: "logs/autonomous_reports/"
+
+  # 可选：发送通知
+  notify:
+    enabled: false
+    method: "file"            # file | slack | email
+    # slack_webhook: ""
+    # email_to: ""
+
+# -----------------------------------------------------------------------------
+# 暂停条件（触发任一条件则暂停等待人工干预）
+# -----------------------------------------------------------------------------
+pause_conditions:
+  # Gate 失败次数
+  gate_failed_twice: true     # 同一 Gate 失败 2 次
+
+  # 错误率阈值
+  error_rate_threshold: 0.3   # 最近 10 次实验中 > 30% 失败
+
+  # 指标退化
+  metric_regression: true     # 关键指标连续 3 次下降
+
+  # 资源限制
+  disk_usage_percent: 90      # 磁盘使用超过 90%
+
+  # 自定义条件（在 Hub 中定义）
+  custom_from_hub: true       # 读取 Hub 中的 pause_if 字段
+
+# -----------------------------------------------------------------------------
+# 自动决策规则（替代人工确认点）
+# -----------------------------------------------------------------------------
+auto_decisions:
+  # Phase 1-2: 问题理解和项目结构
+  skip_problem_confirmation: true   # 自动确认问题理解
+  skip_hub_confirmation: true       # 自动确认 Hub/Roadmap 创建
+
+  # Phase 3: MVP 规划
+  skip_mvp_confirmation: true       # 自动确认 MVP 配置
+
+  # Phase 4: 执行循环
+  auto_proceed_on_success: true     # 实验成功自动进入下一个
+  auto_retry_on_failure: true       # 实验失败自动重试（最多 2 次）
+  max_retries_per_experiment: 2
+
+  # Phase 5: 收敛
+  auto_generate_report: true        # 自动生成最终报告
+
+  # Gate 决策
+  gate_decision_policy: "auto"      # auto | conservative | ask_human
+  # auto: 根据数值自动判断
+  # conservative: 偏保守，宁可多做实验
+  # ask_human: Gate 决策必须人工确认
+
+# -----------------------------------------------------------------------------
+# 完成条件（满足任一则认为研究完成）
+# -----------------------------------------------------------------------------
+completion_conditions:
+  all_gates_passed: true            # 所有 Gate 通过
+  target_metric_achieved: true      # 达到目标指标
+  # target_metric_name: "accuracy"
+  # target_metric_value: 0.95
+  hypothesis_tree_complete: true    # 假设树所有节点已验证
+  max_iterations_reached: false     # 达到最大迭代（false=继续直到其他条件满足）
+
+# -----------------------------------------------------------------------------
+# Token 优化设置
+# -----------------------------------------------------------------------------
+token_optimization:
+  # 给 Claude 的上下文精简
+  max_log_lines: 50           # 最多传 50 行日志
+  max_metrics_history: 10     # 最多传 10 次历史指标
+  compress_hub_context: true  # 压缩 Hub 上下文（只传前 30 行）
+
+  # 调用频率控制
+  min_interval_between_calls: 60    # Claude 调用最小间隔（秒）
+  batch_experiment_analysis: false  # 是否批量分析多个实验结果
+
+# -----------------------------------------------------------------------------
+# 实验执行设置
+# -----------------------------------------------------------------------------
+execution:
+  # 后台执行
+  run_in_background: true
+  use_nohup: true
+
+  # 并行实验
+  max_parallel_experiments: 1       # 最大并行实验数
+
+  # 环境
+  conda_env: "viska-torch-3"
+  init_script: "./init.sh"
+
+  # 结果目录
+  results_base: "results/"
+  logs_base: "logs/"
+
+# -----------------------------------------------------------------------------
+# 安全限制
+# -----------------------------------------------------------------------------
+safety:
+  # 禁止的操作
+  no_delete_data: true        # 不删除数据文件
+  no_modify_scripts: true     # 不修改核心脚本（只改配置）
+  no_external_network: false  # 是否禁止外网访问
+
+  # 资源限制
+  max_gpu_memory_percent: 90
+  max_cpu_percent: 80
+
+# -----------------------------------------------------------------------------
+# 日志级别
+# -----------------------------------------------------------------------------
+logging:
+  level: "INFO"               # DEBUG | INFO | WARNING | ERROR
+  save_claude_responses: true # 保存 Claude 的完整响应
+  save_decision_history: true # 保存所有决策历史

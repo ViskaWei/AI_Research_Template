@@ -1,0 +1,215 @@
+%% ============================================================================
+%% AI Research Template - Phase Report Template
+%% Author: Viska Wei
+%% ============================================================================
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{float}
+
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Phase {{PHASE_NUM}} 实验报告}
+\lhead{{{PROJECT_NAME}}}
+\rfoot{\thepage}
+
+%% Color definitions
+\definecolor{successgreen}{RGB}{40,167,69}
+\definecolor{failred}{RGB}{220,53,69}
+\definecolor{warningyellow}{RGB}{255,193,7}
+\definecolor{primaryblue}{RGB}{0,51,102}
+\definecolor{lightblue}{RGB}{220,235,252}
+
+%% Custom commands
+\newcommand{\pass}{\textcolor{successgreen}{\textbf{PASS}}}
+\newcommand{\fail}{\textcolor{failred}{\textbf{FAIL}}}
+\newcommand{\success}{\textcolor{successgreen}{\textbf{SUCCESS}}}
+\newcommand{\pending}{\textcolor{warningyellow}{\textbf{PENDING}}}
+
+%% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+%% ============================================================================
+%% Document Info
+%% ============================================================================
+\title{\textbf{Phase {{PHASE_NUM}} 综合实验报告}\\[0.5em]
+\large {{SUBTITLE}}\\[1em]
+\normalsize 项目：{{PROJECT_NAME}}}
+\author{Viska Wei}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+%% ============================================================================
+%% Executive Summary
+%% ============================================================================
+\begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=实验结论]
+\textbf{Gate-{{PHASE_NUM}} 验证{{GATE_STATUS}}}。{{SUMMARY}}
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{MVP} & \textbf{方法} & \textbf{关键指标} & \textbf{状态} \\
+\midrule
+% MVP results table here
+{{MVP_TABLE}}
+\bottomrule
+\end{tabular}
+\end{center}
+\end{tcolorbox}
+
+\tableofcontents
+\newpage
+
+%% ============================================================================
+\section{研究背景与问题}
+%% ============================================================================
+
+\subsection{研究动机}
+% Why is this research important?
+
+\subsection{前期工作回顾}
+% Summary of previous phases if applicable
+
+\subsection{本阶段目标}
+% Clear objectives for this phase
+
+%% ============================================================================
+\section{理论基础}
+%% ============================================================================
+
+\subsection{数学模型}
+% Mathematical formulation
+
+\subsection{关键理论}
+% Key theoretical results
+
+\subsection{理论边界}
+% CRLB/Fisher bounds if applicable
+
+%% ============================================================================
+\section{实验方法}
+%% ============================================================================
+
+\subsection{实验设计}
+% Experimental design and rationale
+
+\subsection{参数配置}
+\begin{table}[H]
+\centering
+\caption{实验参数配置}
+\begin{tabular}{llp{8cm}}
+\toprule
+\textbf{参数} & \textbf{值} & \textbf{说明} \\
+\midrule
+% Parameter table here
+{{PARAM_TABLE}}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{评估指标}
+% Metrics used for evaluation
+
+%% ============================================================================
+\section{实验结果}
+%% ============================================================================
+
+\subsection{MVP-{{PHASE_NUM}}.1: {{MVP1_NAME}}}
+% First MVP results
+
+\subsection{MVP-{{PHASE_NUM}}.2: {{MVP2_NAME}}}
+% Second MVP results
+
+\subsection{结果汇总}
+\begin{table}[H]
+\centering
+\caption{实验结果汇总}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{实验} & \textbf{配置} & \textbf{指标} & \textbf{状态} \\
+\midrule
+% Results summary table
+{{RESULTS_TABLE}}
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ============================================================================
+\section{讨论与分析}
+%% ============================================================================
+
+\subsection{关键发现}
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=关键洞见]
+\begin{itemize}
+    \item \textbf{发现 1}: {{FINDING_1}}
+    \item \textbf{发现 2}: {{FINDING_2}}
+    \item \textbf{发现 3}: {{FINDING_3}}
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{Gate 评估}
+% Gate evaluation based on pre-defined criteria
+
+\subsection{局限性}
+% Limitations of current approach
+
+%% ============================================================================
+\section{结论与下一步}
+%% ============================================================================
+
+\subsection{本阶段结论}
+% Summary of conclusions
+
+\subsection{设计原则}
+% Design principles extracted
+
+\subsection{下一步计划}
+\begin{enumerate}
+    \item \textbf{P0 (紧急)}: {{NEXT_P0}}
+    \item \textbf{P1 (重要)}: {{NEXT_P1}}
+    \item \textbf{P2 (可选)}: {{NEXT_P2}}
+\end{enumerate}
+
+%% ============================================================================
+%% References
+%% ============================================================================
+\bibliographystyle{plain}
+\bibliography{phase{{PHASE_NUM}}_report}
+
+%% ============================================================================
+%% Appendix
+%% ============================================================================
+\appendix
+\section{补充实验}
+% Additional experiments
+
+\section{详细推导}
+% Detailed derivations
+
+\end{document}
