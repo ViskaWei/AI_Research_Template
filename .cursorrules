@@ -399,8 +399,126 @@ GPT 讨论 → session.md
 - Hub = 「我们知道了什么？下一步该往哪走？」（战略）
 - Roadmap = 「我们计划跑哪些实验？进度如何？」（执行）
 
+## 🤖 自主科研 Agent
+
+### 启动完整科研流程
+
+**触发词**：`rq` / `立项` / `研究这个问题`
+
+**作用**：从 research question 开始，自动执行完整科研生命周期
+
+**AGENT_LOOP 流程**：
+```
+STEP 0: 理论探索 (Theory Explorer)
+├─ 搜索相关论文 (Perplexity Sonar)
+├─ 分析理论边界 (CRLB/Fisher)
+├─ 生成 theory/*.tex
+└─ 更新 Hub (如有新理论洞见)
+
+STEP 1: 读取状态
+├─ 读取 Hub + Roadmap
+└─ 确定当前 Phase 和下一个 MVP
+
+STEP 2: 检查终止条件
+├─ .stop_research 文件存在 → 停止
+├─ 所有 Gate 通过 → FINALIZE
+└─ 连续失败 > 3 → 暂停
+
+STEP 3: 执行 MVP
+├─ 搜索相关方法论文
+├─ 生成 Coding Prompt
+├─ 执行实验
+├─ 收集结果
+├─ 更新 Hub/Roadmap
+└─ Git commit & push
+
+STEP 4: 生成报告
+├─ 如果 MVP 完成 Gate → 生成 Phase 报告
+├─ 使用 LaTeX 模板
+├─ 编译 PDF
+└─ 保存到 reports/
+
+STEP 5: 继续循环 → 回到 STEP 1
+```
+
+### 继续循环
+
+**触发词**：`loop` / `继续` / `continue`
+
+**作用**：根据现有 Hub/Roadmap 继续自主执行
+
+---
+
+## 📚 理论探索
+
+**触发词**：`theory` / `理论` / `theoretical`
+
+**用途**：自动搜索相关论文 + 生成理论分析文档
+
+**工作流程**：
+1. 搜索相关理论论文 (arXiv math.ST, stat.TH, stat.ML)
+2. 使用 AI 生成理论分析
+3. 生成 `theory/theoretical_analysis.tex`
+4. 生成 `theory/related_papers.bib`
+
+**脚本调用**：
+```bash
+cd _backend/scripts
+python theory_explorer.py "研究问题" --topic 主题名
+```
+
+**输出位置**：`experiments/[topic]/theory/`
+
+---
+
+## 🔍 文献搜索
+
+**触发词**：`search` / `搜索` / `papers`
+
+**用途**：在 arXiv/Semantic Scholar/Perplexity 搜索论文
+
+**脚本调用**：
+```bash
+cd _backend/scripts
+python search_papers.py "查询" --max-results 10 --output refs.bib
+```
+
+**搜索源**：
+- arXiv (始终可用)
+- Semantic Scholar (始终可用)
+- Perplexity Sonar Pro (需要 OPENROUTER_API_KEY)
+
+---
+
+## 📝 报告生成
+
+### 生成 LaTeX 报告
+
+**触发词**：`latex` / `report` / `报告`
+
+**用途**：基于实验结果生成高质量 LaTeX 报告
+
+**模板位置**：`_backend/template/report.tex`
+
+**输出位置**：`reports/[topic]/phaseX/phaseX_report.tex`
+
+### 编译 PDF
+
+**触发词**：`compile` / `pdf` / `编译`
+
+**脚本调用**：
+```bash
+cd _backend/scripts
+./compile_report.sh [topic] [phase_number]
+```
+
+**输出位置**：`reports/phaseX_report.pdf`
+
+---
+
 ## 🔗 完整工作流
 
+### 标准工作流
 ```
 1. 规划实验
    n [实验描述]
@@ -416,6 +534,21 @@ GPT 讨论 → session.md
    ↓
 5. 生成报告
    report
+```
+
+### 自主科研工作流 (NEW!)
+```
+1. 启动科研
+   rq [Research Question]
+   ↓
+2. 自动循环
+   AGENT_LOOP (理论→实验→报告)
+   ↓
+3. 人工干预（可选）
+   创建 .stop_research 暂停
+   ↓
+4. 继续科研
+   loop
 ```
 
 ### 快捷命令对照表
@@ -434,3 +567,10 @@ GPT 讨论 → session.md
 | `report` | 生成报告 | `reports/drafts/` |
 | `session` | GPT 会话归档 | `experiments/[topic]/sessions/` |
 | `view <path>` | Markdown 预览 | 详见 `_backend/template/prompt/prompt_view.md` |
+| **🆕 自主科研** | | |
+| `rq [问题]` | 🤖 启动自主科研 Agent | 完整项目结构 |
+| `loop` | 🔄 继续自主循环 | - |
+| `theory [主题]` | 📚 启动理论探索 | `experiments/[topic]/theory/` |
+| `search [关键词]` | 🔍 搜索学术论文 | 终端输出 + BibTeX |
+| `latex [phase]` | 📄 生成 LaTeX 报告 | `reports/[topic]/phaseX/` |
+| `compile [phase]` | 📑 编译 PDF | `reports/*.pdf` |
